@@ -14,8 +14,8 @@ angular.module('starter.controllers', [])
     $scope.instructions = {
       "def": "Click an event on the map to see participating teams",
 
-      "def_team": "Participating team's icons are colored according to the age of the team\n" +
-      "Greener teams are newer, while bluer teams are older\n" +
+      "def_team": "Participating team's icons are colored according to the age of the team<br>" +
+      "Greener teams are newer, while bluer teams are older <br>" +
       "Click anywhere off of the event to hide teams and return to all events",
 
       "wait": "Loading data...",

@@ -42,7 +42,9 @@
       <div id="myMap" data-tap-disabled="true"></div>
     </ion-content>
     <ion-footer-bar class="bar-dark footer-tall ">
-      <div class="instructions">{{current_instruction}}</div>
+      <div class="instructions">
+        <p ng-bind-html="current_instruction"></p>
+      </div>
     </ion-footer-bar>
     
   </body>
