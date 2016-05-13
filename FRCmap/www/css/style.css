@@ -1,5 +1,18 @@
 /* Empty. Add your own CSS if you like */
-
+#myMap {
+  width: 100%;
+  height: 100%;
+}
 .pushpin_team {
 	color: red;
+}
+
+.footer-tall {
+	/*height: 80px;*/
+	min-height: 44px;
+	height: inherit;
+}
+.instructions {
+	/*text-align: center; 
+	white-space: pre-line*/
 }
