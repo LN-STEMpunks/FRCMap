@@ -205,7 +205,9 @@ angular.module('starter.controllers', [])
     function initialize() {
 
       var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
-        credentials: 'Atuv3Tf8qFuEf69Mneec0RtxJuLOkzywh9ECo3FJUZMIxr0ykJfWxHK5ErEFTI-X'
+        credentials: 'Atuv3Tf8qFuEf69Mneec0RtxJuLOkzywh9ECo3FJUZMIxr0ykJfWxHK5ErEFTI-X',
+        center: new Microsoft.Maps.Location(37, -95),
+        zoom: 4
       });
 
 
