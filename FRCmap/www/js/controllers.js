@@ -153,6 +153,55 @@ angular.module('starter.controllers', [])
                     pushpinTeam.teamLocation = locationTeam;
                     team.pushpinTeam = pushpinTeam;
                     team.teamLocation = locationTeam;
+
+                    var line1 = team.nickname + "\n";
+                      if (team.motto) {
+                        line1 += '"' + team.motto + '"\n';
+                      }
+
+                    var infoboxOptions = { visible: false, 
+                      width :200, 
+                      height :100, 
+                      showCloseButton: true, 
+                      zIndex: 0, 
+                      offset:new Microsoft.Maps.Point(10,0), 
+                      showPointer: true,
+                      description: line1,
+                      //description: '<div id="infoboxText" style="background-color:White; border-style:solid;border-width:medium; border-color:DarkOrange; min-height:100px;width:240px;"><b id="infoboxTitle" style="position:absolute; top:10px; left:10px; width:220px;">myTitle</b><a id="infoboxDescription" style="position:absolute; top:30px; left:10px; width:220px;">Description</a></div>',
+                    }; 
+                    var infobox = new Microsoft.Maps.Infobox(locationTeam, infoboxOptions );    
+                    $scope.map.entities.push(infobox);
+                    //infobox.setHtmlContent('<div id="infoboxText" style="background-color:White; border-style:solid;border-width:medium; border-color:DarkOrange; min-height:100px;width:240px;"><b id="infoboxTitle" style="position:absolute; top:10px; left:10px; width:220px;">myTitle</b><a id="infoboxDescription" style="position:absolute; top:30px; left:10px; width:220px;">Description</a></div>'); 
+                    var content= infobox.getHtmlContent(); 
+
+                    pushpinClick= Microsoft.Maps.Events.addHandler(pushpinTeam, 'click', displayEventInfo);  
+
+                    infobox.map = ($scope.map);
+
+                    function displayEventInfo () {
+                      infobox.setOptions({ visible: true, });
+                    }
+
+
+
+                    /*var infobox = new Microsoft.Maps.Infobox(locationTeam, { description: 'description', showCloseButton: false, showPointer: false });
+
+
+                     Microsoft.Maps.Events.addHandler(pushpinTeam , 'mouseover', tooltipPin);
+
+                     Microsoft.Maps.Events.addHandler(pushpinTeam , 'mouseout', tooltipPin2);
+
+                     function tooltipPin(e) {
+                        var loc = e.target.getLocation();
+                        infobox.setMap($scope.map);
+                        infobox.setLocation(loc);
+                        infobox.setHtmlContent('<div id="infoboxText" style="background-color:White; border-style:solid; border-width:medium; border-color:DarkOrange; min-height:40px; width: 150px; "><p id="infoboxDescription" style="position: absolute; top: 10px; left: 10px; width: 220px; ">mydescription</p></div>');
+                      };
+
+                      function tooltipPin2(e) {
+                        infobox.setHtmlContent('<div></div>');
+                      };*/
+
                     // Add a handler to the pushpin drag
                     //Microsoft.Maps.Events.addHandler(pushpinTeam, 'click', function(something){
 
@@ -185,7 +234,6 @@ angular.module('starter.controllers', [])
       // var options = $scope.map.getOptions();
       var options = {};
       options.bounds = bestFitEvents;
-      $interval(function () { $scope.map.setView(options); }, 500);
       //$scope.map.setView(options);
     }
 
