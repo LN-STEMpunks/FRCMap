@@ -10,6 +10,22 @@ angular.module('starter.controllers', [])
     $scope.events = [];
     $scope.loadCompleted = false;
 
+
+    $scope.instructions = {
+        "def": "Click an event on the map to see participating teams",
+
+        "def_team": "Participating team's icons are colored according to the age of the team\n" + 
+                    "Greener teams are newer, while bluer teams are older\n" + 
+                    "Click anywhere off of the event to hide teams and return to all events",
+
+        "wait": "Loading data...",
+
+        "loading_event": "Loading data...",
+    };
+
+    $scope.current_instruction = $scope.instructions.wait;
+
+
     var debouncedFitMapToEvents = ionic.debounce(bestFitMapToEvents, 500);
     function searchModuleLoaded() {
 
@@ -30,6 +46,7 @@ angular.module('starter.controllers', [])
     }
 
     function eventDataLoaded(response) {
+
       $scope.events = response.data;
       $scope.loadCompleted = true;
 
@@ -64,6 +81,7 @@ angular.module('starter.controllers', [])
               event.teams = response.data;
 
               if (event.teams && event.teams.length) {
+                $scope.current_instruction = $scope.instructions.def_team;
 
                 var debouncedFitMapToTeams = ionic.debounce(function () { bestFitMapToTeams(event) }, 500);
 
@@ -127,7 +145,6 @@ angular.module('starter.controllers', [])
         event.teamPins = []; // we'll store each event's team pins for convenience
         if (locationString != null && event.alliances && event.alliances.length) {
 
-
           search.geocode({
             where: locationString, count: 1,
             errorCallback: function (geocodeRequest, userData) { geoCodeError(geocodeRequest, userData, event) },
@@ -136,10 +153,12 @@ angular.module('starter.controllers', [])
           });
 
         } else {
-
           console.log("FRC event " + event.key + ", unable to locate");
         }
       });
+
+      $scope.current_instruction = $scope.instructions.def;
+      
 
     }
 
@@ -152,7 +171,7 @@ angular.module('starter.controllers', [])
       options.bounds = bestFitEvents;
       $interval(function () { $scope.map.setView(options); }, 500);
       //$scope.map.setView(options);
-    }
+     }
 
     function bestFitMapToTeams(event) {
       // find best fit bounds from the locations
@@ -182,6 +201,7 @@ angular.module('starter.controllers', [])
         // reset the map to original event pins
         $scope.teamPins.map(function (teamPin) { teamPin.setOptions({ visible: false }) });
         $scope.eventPins.map(function (eventPin) { eventPin.setOptions({ visible: true }) });
+        $scope.current_instruction = $scope.instructions.def;
       });
 
 
