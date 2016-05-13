@@ -7,6 +7,8 @@ angular.module('starter.services', [])
 
     //        var authTokenHeaderValue = 'Basic cmFuZGJyb3duOjYwRUQ5NkE4LUI0OEEtNEEzNy1BMENCLThGQTk0MDE2M0JGNQ==';
 
+    // turn on global default caching
+    $http.defaults.cache = true;
     var config = {
         headers: {
             // FIRST API
