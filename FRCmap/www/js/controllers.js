@@ -38,9 +38,10 @@ angular.module('starter.controllers', [])
       /*
       Generates a color based on how long a team has existed. Very green means a very new team (at time of event), and very blue means older team
       */
+      var year = $scope.year;
       var r, g, b;
       r = 0;
-      b = Math.floor(180 * ((($scope.year - rookie_year)) / ($scope.year - 1992)));
+      b = Math.floor(180 * (((year - rookie_year)) / (year - 1992)));
       g = 180 - b;
       return "rgb(" + r + ", " + g + ", " + b + ")";
     }
