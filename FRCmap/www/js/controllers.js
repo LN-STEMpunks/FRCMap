@@ -12,15 +12,15 @@ angular.module('starter.controllers', [])
 
 
     $scope.instructions = {
-        "def": "Click an event on the map to see participating teams",
+      "def": "Click an event on the map to see participating teams",
 
-        "def_team": "Participating team's icons are colored according to the age of the team\n" + 
-                    "Greener teams are newer, while bluer teams are older\n" + 
-                    "Click anywhere off of the event to hide teams and return to all events",
+      "def_team": "Participating team's icons are colored according to the age of the team\n" +
+      "Greener teams are newer, while bluer teams are older\n" +
+      "Click anywhere off of the event to hide teams and return to all events",
 
-        "wait": "Loading data...",
+      "wait": "Loading data...",
 
-        "loading_event": "Loading data...",
+      "loading_event": "Loading data...",
     };
 
     $scope.current_instruction = $scope.instructions.wait;
@@ -58,7 +58,7 @@ angular.module('starter.controllers', [])
         if (geocodeResult && geocodeResult.results) {
           var location = geocodeResult.results[0].location;
           //var location = new Location(event.venue_address);
-          console.log("FRC event " + event.key + ", " + event.locationString);
+          //console.log("FRC event " + event.key + ", " + event.locationString);
           var pushpin = new Microsoft.Maps.Pushpin(location,
             {
               // text: event.key,
@@ -77,57 +77,16 @@ angular.module('starter.controllers', [])
             //hide other pins
             $scope.eventPins.map(function (eventPin) { if (eventPin != pushpin) eventPin.setOptions({ visible: false }) });
 
-            frcapiService.getEventTeams(event.key).then(function (response) {
-              event.teams = response.data;
+            if (event.teams == null) {
+              frcapiService.getEventTeams(event.key).then(function (response) {
+                event.teams = response.data;
+                wireUpEventTeamData(event);
+              });
+            }
+            else {
+              wireUpEventTeamData(event);
 
-              if (event.teams && event.teams.length) {
-                $scope.current_instruction = $scope.instructions.def_team;
-
-                var debouncedFitMapToTeams = ionic.debounce(function () { bestFitMapToTeams(event) }, 500);
-
-                event.teams.map(function (team) {
-                  console.log("event " + event.key + ", team: " + team.key + ", location: " + team.location);
-
-                  var teamLocationString = team.location;
-                  if (teamLocationString != null) {
-                    search.geocode({
-                      where: teamLocationString, count: 1,
-                      callback: function (geocodeResultTeam, userDataTeam) {
-                        if (geocodeResultTeam && geocodeResultTeam.results) {
-                          var locationTeam = geocodeResultTeam.results[0].location;
-                          var pushpinTeam = new Microsoft.Maps.Pushpin(locationTeam,
-                            {
-                              //text: team.key,
-                              text: 'T',
-                              color: getColor(team.rookie_year),
-                              title: team.nickname + " " + team.key,
-                              subTitle: teamLocationString,
-                            });
-                          // store this so we can easily recall the location from the pin
-                          pushpinTeam.teamLocation = locationTeam;
-                          // Add a handler to the pushpin drag
-                          //Microsoft.Maps.Events.addHandler(pushpinTeam, 'click', function(something){
-
-                          $scope.teamPins.push(pushpinTeam);
-                          event.teamPins.push(pushpinTeam);
-                          $scope.map.entities.push(pushpinTeam);
-                          debouncedFitMapToTeams();
-                        }
-                      }
-                    });
-                  } else {
-                    console.log('unable to get location for team: ', team.key);
-                  }
-                });
-              }
-              else {
-
-                console.log('No teams found for event: ', event.key);
-                alert('No teams found for event: ', event.key);
-
-                $scope.eventPins.map(function (eventPin) { eventPin.setOptions({ visible: true }) });
-              }
-            });
+            }
           });
           $scope.eventPins.push(pushpin);
           $scope.map.entities.push(pushpin);
@@ -158,20 +117,76 @@ angular.module('starter.controllers', [])
       });
 
       $scope.current_instruction = $scope.instructions.def;
-      
+    }
 
+    function wireUpEventTeamData(event) {
+      if (event.teams && event.teams.length) {
+        $scope.current_instruction = $scope.instructions.def_team;
+
+        var debouncedFitMapToTeams = ionic.debounce(function () { bestFitMapToTeams(event) }, 500);
+
+        event.teams.map(function (team) {
+          //console.log("event " + event.key + ", team: " + team.key + ", location: " + team.location);
+
+          // only do the geocode once. If we've already assigned teamLocation, we don't have to do it again
+          if (team.teamLocation != null && team.pushpinTeam != null) {
+            team.pushpinTeam.setOptions({ visible: true });
+          }
+          else {
+            var teamLocationString = team.location;
+            if (teamLocationString != null) {
+              search.geocode({
+                where: teamLocationString, count: 1,
+                callback: function (geocodeResultTeam, userDataTeam) {
+                  if (geocodeResultTeam && geocodeResultTeam.results) {
+                    var locationTeam = geocodeResultTeam.results[0].location;
+                    var pushpinTeam = new Microsoft.Maps.Pushpin(locationTeam,
+                      {
+                        //text: team.key,
+                        text: 'T',
+                        color: getColor(team.rookie_year),
+                        title: team.nickname + " " + team.key,
+                        subTitle: teamLocationString,
+                      });
+                    // store this so we can easily recall the location from the pin
+                    pushpinTeam.teamLocation = locationTeam;
+                    team.pushpinTeam = pushpinTeam;
+                    team.teamLocation = locationTeam;
+                    // Add a handler to the pushpin drag
+                    //Microsoft.Maps.Events.addHandler(pushpinTeam, 'click', function(something){
+
+                    $scope.teamPins.push(pushpinTeam);
+                    event.teamPins.push(pushpinTeam);
+                    $scope.map.entities.push(pushpinTeam);
+                    debouncedFitMapToTeams();
+                  }
+                }
+              });
+            } else {
+              console.log('unable to get location for team: ', team.key);
+            }
+          }
+        });
+      }
+      else {
+
+        console.log('No teams found for event: ', event.key);
+        alert('No teams found for event: ', event.key);
+
+        $scope.eventPins.map(function (eventPin) { eventPin.setOptions({ visible: true }) });
+      }
     }
 
     function bestFitMapToEvents() {
       // find best fit bounds from the locations
       var allEventLocations = $scope.eventPins.map(function (ep) { return ep.eventLocation });
       var bestFitEvents = new Microsoft.Maps.LocationRect.fromLocations(allEventLocations);
-     // var options = $scope.map.getOptions();
-     var options = {};
+      // var options = $scope.map.getOptions();
+      var options = {};
       options.bounds = bestFitEvents;
       $interval(function () { $scope.map.setView(options); }, 500);
       //$scope.map.setView(options);
-     }
+    }
 
     function bestFitMapToTeams(event) {
       // find best fit bounds from the locations
@@ -181,8 +196,8 @@ angular.module('starter.controllers', [])
         var allTeamLocations = $scope.teamPins.map(function (tp) { return tp.teamLocation });
       }
       var bestFitTeams = new Microsoft.Maps.LocationRect.fromLocations(allTeamLocations);
-     // var options = $scope.map.getOptions();
-     var options = {};
+      // var options = $scope.map.getOptions();
+      var options = {};
       options.bounds = bestFitTeams;
       $scope.map.setView(options);
     }
