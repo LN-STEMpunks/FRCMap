@@ -18,6 +18,17 @@ angular.module('starter.controllers', [])
       frcapiService.getEvents($scope.year).then(eventDataLoaded);
     }
 
+    function getColor(rookie_year) {
+      /*
+      Generates a color based on how long a team has existed. Very green means a very new team (at time of event), and very blue means older team
+      */
+      var r, g, b;
+      r = 0;
+      b = Math.floor(180 * ((($scope.year - rookie_year)) / ($scope.year - 1992)));
+      g = 180 - b;
+      return "rgb(" + r + ", " + g + ", " + b + ")";
+    }
+
     function eventDataLoaded(response) {
       $scope.events = response.data;
       $scope.loadCompleted = true;
@@ -35,6 +46,7 @@ angular.module('starter.controllers', [])
             {
               // text: event.key,
               text: 'E',
+              color: 'red',
               title: event.name + ' ' + event.locationString,
               subTitle: event.start_date,
             });
@@ -61,7 +73,7 @@ angular.module('starter.controllers', [])
                   var teamLocationString = team.location;
                   if (teamLocationString != null) {
                     search.geocode({
-                      where: teamLocationString, count: 10,
+                      where: teamLocationString, count: 1,
                       callback: function (geocodeResultTeam, userDataTeam) {
                         if (geocodeResultTeam && geocodeResultTeam.results) {
                           var locationTeam = geocodeResultTeam.results[0].location;
@@ -69,6 +81,7 @@ angular.module('starter.controllers', [])
                             {
                               //text: team.key,
                               text: 'T',
+                              color: getColor(team.rookie_year),
                               title: team.nickname + " " + team.key,
                               subTitle: teamLocationString,
                             });
@@ -128,8 +141,8 @@ angular.module('starter.controllers', [])
         }
       });
 
-
     }
+
     function bestFitMapToEvents() {
       // find best fit bounds from the locations
       var allEventLocations = $scope.eventPins.map(function (ep) { return ep.eventLocation });
