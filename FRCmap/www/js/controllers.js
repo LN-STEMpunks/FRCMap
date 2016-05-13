@@ -153,20 +153,81 @@ angular.module('starter.controllers', [])
                     pushpinTeam.teamLocation = locationTeam;
                     team.pushpinTeam = pushpinTeam;
                     team.teamLocation = locationTeam;
+                    
+                    /*
+                    
+                    country_name
+:
+"USA"
+key
+:
+"frc5178"
+locality
+:
+"Farmington"
+location
+:
+"Farmington, Arkansas, USA"
+motto
+:
+"The Nerdiest Bird Gets the Worm"
+name
+:
+"Baldor Electric & Farmington High School"
+nickname
+:
+"The Nerdy Birds"
+pushpinTeam
+:
+t
+region
+:
+"Arkansas"
+rookie_year
+:
+2014
+teamLocation
+:
+t
+team_number
+:
+5178
+website
+:
+"http://www.firstinspires.org/"
+                    
+                    
+                    */
 
-                    var line1 = team.nickname + "\n";
-                      if (team.motto) {
-                        line1 += '"' + team.motto + '"\n';
+                    var line1 = "<div>";
+                      /*if (team.motto) {
+                        line1 += "<div>\"" + team.motto + "\" </div>";
+                      }*/
+                      if (team.key) {
+                        line1 += "<div>FRC#" + (team.key).replaceAll("frc", '') + "" + " </div>";
                       }
+                      if (team.rookie_year) {
+                        line1 += "<div>Rookie Year: " + team.rookie_year + " </div>";
+                      }
+                      if (team.website) {
+                        line1 += "<div><a target='_blank' href=" + team.website + ">Website</a>" + " </div>";
+                      }
+                      
+                      line1 += "<div style='float: right'><a target='_blank' href=http://lnstempunks.azurewebsites.net/FRCapp/#/app/team-detail/" + team.key + "> More Info</a></div>";
+                      
+                      
+                      line1 += "</div>";
 
                     var infoboxOptions = { visible: false, 
-                      width :200, 
-                      height :100, 
+                      width: 200, 
+                      height: 200, 
                       showCloseButton: true, 
                       zIndex: 0, 
-                      offset:new Microsoft.Maps.Point(10,0), 
-                      showPointer: true,
+                      offset:new Microsoft.Maps.Point(0,0), 
+                      showPointer: true, 
+                      title: team.nickname,                   
                       description: line1,
+                      //description: "<div>hello world <div>nested div</div>",
                       //description: '<div id="infoboxText" style="background-color:White; border-style:solid;border-width:medium; border-color:DarkOrange; min-height:100px;width:240px;"><b id="infoboxTitle" style="position:absolute; top:10px; left:10px; width:220px;">myTitle</b><a id="infoboxDescription" style="position:absolute; top:30px; left:10px; width:220px;">Description</a></div>',
                     }; 
                     var infobox = new Microsoft.Maps.Infobox(locationTeam, infoboxOptions );    
@@ -176,7 +237,10 @@ angular.module('starter.controllers', [])
 
                     pushpinClick= Microsoft.Maps.Events.addHandler(pushpinTeam, 'click', displayEventInfo);  
 
-                    infobox.map = ($scope.map);
+                    //infobox.map = ($scope.map);
+                    infobox.setMap($scope.map);
+                    
+                    pushpinTeam.infobox = infobox; //So we can get it from $scope
 
                     function displayEventInfo () {
                       infobox.setOptions({ visible: true, });
@@ -255,7 +319,8 @@ angular.module('starter.controllers', [])
       var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
         credentials: 'Atuv3Tf8qFuEf69Mneec0RtxJuLOkzywh9ECo3FJUZMIxr0ykJfWxHK5ErEFTI-X',
         center: new Microsoft.Maps.Location(37, -95),
-        zoom: 4
+        zoom: 4,
+        mapTypeId: Microsoft.Maps.MapTypeId.road,
       });
 
 
@@ -263,11 +328,16 @@ angular.module('starter.controllers', [])
       Microsoft.Maps.loadModule('Microsoft.Maps.Search', { callback: searchModuleLoaded });
 
 
-      Microsoft.Maps.Events.addHandler(map, 'click', function (something) {
+      Microsoft.Maps.Events.addHandler(map, 'click', function (e) {
         // reset the map to original event pins
-        $scope.teamPins.map(function (teamPin) { teamPin.setOptions({ visible: false }) });
-        $scope.eventPins.map(function (eventPin) { eventPin.setOptions({ visible: true }) });
-        $scope.current_instruction = $scope.instructions.def;
+        if (e.targetType == "map") {
+          $scope.teamPins.map(function (teamPin) { 
+            teamPin.setOptions({ visible: false });
+            teamPin.infobox.setOptions({ visible: false });
+         });
+          $scope.eventPins.map(function (eventPin) { eventPin.setOptions({ visible: true }) });
+          $scope.current_instruction = $scope.instructions.def;
+        } 
       });
 
 
