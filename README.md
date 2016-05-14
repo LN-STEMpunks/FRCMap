@@ -13,4 +13,4 @@ The navigation is simple: click the event you'd like to see, then click all the 
 
 # Screenshots
 
-![Pic](screenshot0.png)
+![Pic](screenshot_0.png)
