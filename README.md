@@ -14,3 +14,10 @@ The navigation is simple: click the event you'd like to see, then click all the 
 # Screenshots
 
 ![Pic](screenshot_0.png)
+
+![Pic](screenshot_1.png)
+
+![Pic](screenshot_2.png)
+
+![Pic](screenshot_3.png)
+
