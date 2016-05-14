@@ -2,7 +2,7 @@
 A map of FRC events and teams
 
 This project in action:
-https://lnstempunks.azurewebsites.net/FRCmap
+http://lnstempunks.azurewebsites.net/FRCmap
 
 
 For the Open challenge, we decided to create an interactive map of FRC events. This allows a rich interactive user experience to explore the distribution of events and participating teams across the globe. The user can drag and zoom through a map, and pushpins appear where FRC events have taken place. When a user clicks an event, we show the teams that attended the selected event, and apply colored pushpins that signify the team's years of competition (newer teams are greener, while older teams are bluer in color). Users can then click a specific team pushpin (indicated with a T logo) for a popup infobox with some additional information on that team. On mobile devices, the information is shown in the footer rather than a popup box, which we've found to be cumbersome on mobile devices.
