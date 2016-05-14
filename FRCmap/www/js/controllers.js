@@ -334,13 +334,15 @@ website
       Microsoft.Maps.Events.addHandler(map, 'click', function (e) {
         // reset the map to original event pins
         if (e.targetType == "map") {
+          $scope.current_instruction = $scope.instructions.def;
           $scope.teamPins.map(function (teamPin) { 
             teamPin.setOptions({ visible: false });
             teamPin.infobox.setOptions({ visible: false });
          });
           $scope.eventPins.map(function (eventPin) { eventPin.setOptions({ visible: true }) });
-          $scope.current_instruction = $scope.instructions.def;
+          $scope.$apply();
         } 
+        
       });
 
 
