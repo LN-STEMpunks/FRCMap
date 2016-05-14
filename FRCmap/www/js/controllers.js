@@ -141,6 +141,11 @@ angular.module('starter.controllers', [])
                 callback: function (geocodeResultTeam, userDataTeam) {
                   if (geocodeResultTeam && geocodeResultTeam.results) {
                     var locationTeam = geocodeResultTeam.results[0].location;
+                    for (var i = 0; i < event.teams.length; ++i) {
+                      if (event.teams[i].teamLocation && (event.teams[i].teamLocation.latitude == locationTeam.latitude && event.teams[i].teamLocation.longitude == locationTeam.longitude)) {
+                          locationTeam.latitude += .02;
+                      }
+                    }
                     var pushpinTeam = new Microsoft.Maps.Pushpin(locationTeam,
                       {
                         //text: team.key,
