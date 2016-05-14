@@ -204,13 +204,13 @@ website
                         line1 += "<div>\"" + team.motto + "\" </div>";
                       }*/
                       if (team.key) {
-                        line1 += "<div>FRC#" + (team.key).replaceAll("frc", '') + "" + " </div>";
+                        line1 += "<div>FRC#" + (team.key).replace("frc", '') + "" + " </div>";
                       }
                       if (team.rookie_year) {
                         line1 += "<div>Rookie Year: " + team.rookie_year + " </div>";
                       }
                       if (team.website) {
-                        line1 += "<div><a target='_blank' href=" + team.website + ">Website</a>" + " </div>";
+                         line1 += "<div><a target='_blank' href=" + team.website + ">Website</a>" + " </div>";
                       }
                       
                       line1 += "<div style='float: right'><a target='_blank' href=http://lnstempunks.azurewebsites.net/FRCapp/#/app/team-detail/" + team.key + "> More Info</a></div>";
@@ -237,8 +237,11 @@ website
 
                     pushpinClick= Microsoft.Maps.Events.addHandler(pushpinTeam, 'click', displayEventInfo);  
 
-                    //infobox.map = ($scope.map);
-                    infobox.setMap($scope.map);
+                    // bing maps v7 and v8 work differently, handle either just in case
+                    if(infobox.setMap)
+                      infobox.setMap($scope.map);
+                    else
+                      infobox.map = ($scope.map);
                     
                     pushpinTeam.infobox = infobox; //So we can get it from $scope
 
