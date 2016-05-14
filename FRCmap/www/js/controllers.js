@@ -26,7 +26,7 @@ angular.module('starter.controllers', [])
     $scope.current_instruction = $scope.instructions.wait;
 
 
-    var debouncedFitMapToEvents = ionic.debounce(bestFitMapToEvents, 500);
+    var debouncedFitMapToEvents = ionic.debounce(bestFitMapToEvents, 100);
     function searchModuleLoaded() {
 
       search = new Microsoft.Maps.Search.SearchManager($scope.map);
@@ -60,6 +60,16 @@ angular.module('starter.controllers', [])
           var location = geocodeResult.results[0].location;
           //var location = new Location(event.venue_address);
           //console.log("FRC event " + event.key + ", " + event.locationString);
+          
+          for (var i = 0; i < $scope.events.length; ++i) {
+            var evt = $scope.events[i];
+            if (evt.eventLocation) {
+              if ((evt.eventLocation.latitude == location.latitude && evt.eventLocation.longitude == location.longitude)) {
+                  location.latitude += .02;
+              }
+            }
+          }
+          
           var pushpin = new Microsoft.Maps.Pushpin(location,
             {
               // text: event.key,
@@ -71,6 +81,7 @@ angular.module('starter.controllers', [])
 
           // store this so we can easily recall the location from the pin
           pushpin.eventLocation = location;
+          event.eventLocation = location;
 
           // Add a handler to the pushpin drag
           Microsoft.Maps.Events.addHandler(pushpin, 'click', function (something) {
@@ -124,7 +135,7 @@ angular.module('starter.controllers', [])
       if (event.teams && event.teams.length) {
         $scope.current_instruction = $scope.instructions.def_team;
 
-        var debouncedFitMapToTeams = ionic.debounce(function () { bestFitMapToTeams(event) }, 500);
+        var debouncedFitMapToTeams = ionic.debounce(function () { bestFitMapToTeams(event) }, 100);
 
         event.teams.map(function (team) {
           //console.log("event " + event.key + ", team: " + team.key + ", location: " + team.location);
