@@ -3,7 +3,7 @@ angular.module('starter.controllers', [])
   .controller('DashCtrl', function ($scope, $window, $interval, frcapiService) {
     var search;
     $scope.yearRange = [];
-    for(var yr=new Date().getFullYear(); yr> 1991; yr--){
+    for (var yr = new Date().getFullYear(); yr > 1991; yr--) {
       $scope.yearRange.push(yr);
     }
 
@@ -38,7 +38,7 @@ angular.module('starter.controllers', [])
       frcapiService.getEvents($scope.year).then(eventDataLoaded);
     }
     $scope.refreshYear = function () {
-      
+
       $scope.map.entities.clear();
       $scope.eventPins = [];
       $scope.teamPins = [];
@@ -270,6 +270,10 @@ website
                     // HACKISH: bing maps v8 seems to not respond to touch events on android chrome
                     // Also popups on mobile are kinda annoying. So for mobile devices, let's just show the team info in the footer div instead of infobox 
                     Microsoft.Maps.Events.addHandler(pushpinTeam, 'click', function showToolTip(e) {
+                      $scope.current_instruction = line1;
+                      $scope.$apply();
+                    });
+                    Microsoft.Maps.Events.addHandler(pushpinTeam, 'mouseover', function showToolTip(e) {
                       $scope.current_instruction = line1;
                       $scope.$apply();
                     });
