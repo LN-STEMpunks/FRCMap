@@ -153,7 +153,7 @@ angular.module('starter.controllers', [])
                     pushpinTeam.teamLocation = locationTeam;
                     team.pushpinTeam = pushpinTeam;
                     team.teamLocation = locationTeam;
-                    
+
                     /*
                     
                     country_name
@@ -200,55 +200,66 @@ website
                     */
 
                     var line1 = "<div>";
-                      /*if (team.motto) {
-                        line1 += "<div>\"" + team.motto + "\" </div>";
-                      }*/
-                      if (team.key) {
-                        line1 += "<div>FRC#" + (team.key).replace("frc", '') + "" + " </div>";
-                      }
-                      if (team.rookie_year) {
-                        line1 += "<div>Rookie Year: " + team.rookie_year + " </div>";
-                      }
-                      if (team.website) {
-                         line1 += "<div><a target='_blank' href=" + team.website + ">Website</a>" + " </div>";
-                      }
-                      
-                      line1 += "<div style='float: right'><a target='_blank' href=http://lnstempunks.azurewebsites.net/FRCapp/#/app/team-detail/" + team.key + "> More Info</a></div>";
-                      
-                      
-                      line1 += "</div>";
+                    /*if (team.motto) {
+                      line1 += "<div>\"" + team.motto + "\" </div>";
+                    }*/
+                    if (team.key) {
+                      line1 += "<div>FRC#" + (team.key).replace("frc", '') + "" + " </div>";
+                    }
+                    if (team.rookie_year) {
+                      line1 += "<div>Rookie Year: " + team.rookie_year + " </div>";
+                    }
+                    if (team.website) {
+                      line1 += "<div><a target='_blank' href=" + team.website + ">Website</a>" + " </div>";
+                    }
 
-                    var infoboxOptions = { visible: false, 
-                      width: 200, 
-                      height: 200, 
-                      showCloseButton: true, 
-                      zIndex: 0, 
-                      offset:new Microsoft.Maps.Point(0,0), 
-                      showPointer: true, 
-                      title: team.nickname,                   
+                    line1 += "<div style='float: right'><a target='_blank' href=http://lnstempunks.azurewebsites.net/FRCapp/#/app/team-detail/" + team.key + "> More Info</a></div>";
+
+
+                    line1 += "</div>";
+
+                    var infoboxOptions = {
+                      visible: false,
+                      width: 200,
+                      height: 200,
+                      showCloseButton: true,
+                      zIndex: 0,
+                      offset: new Microsoft.Maps.Point(0, 0),
+                      showPointer: true,
+                      title: team.nickname,
                       description: line1,
                       //description: "<div>hello world <div>nested div</div>",
                       //description: '<div id="infoboxText" style="background-color:White; border-style:solid;border-width:medium; border-color:DarkOrange; min-height:100px;width:240px;"><b id="infoboxTitle" style="position:absolute; top:10px; left:10px; width:220px;">myTitle</b><a id="infoboxDescription" style="position:absolute; top:30px; left:10px; width:220px;">Description</a></div>',
-                    }; 
-                    var infobox = new Microsoft.Maps.Infobox(locationTeam, infoboxOptions );    
+                    };
+                    var infobox = new Microsoft.Maps.Infobox(locationTeam, infoboxOptions);
                     $scope.map.entities.push(infobox);
                     //infobox.setHtmlContent('<div id="infoboxText" style="background-color:White; border-style:solid;border-width:medium; border-color:DarkOrange; min-height:100px;width:240px;"><b id="infoboxTitle" style="position:absolute; top:10px; left:10px; width:220px;">myTitle</b><a id="infoboxDescription" style="position:absolute; top:30px; left:10px; width:220px;">Description</a></div>'); 
-                    var content= infobox.getHtmlContent(); 
 
-                    pushpinClick= Microsoft.Maps.Events.addHandler(pushpinTeam, 'click', displayEventInfo);  
+                    // HACKISH: bing maps v8 seems to not respond to touch events on android chrome
+                    // Also popups on mobile are kinda annoying. So for mobile devices, let's just show the team info in the footer div instead of infobox 
+                    Microsoft.Maps.Events.addHandler(pushpinTeam, 'click', function showToolTip(e) {
+                      $scope.current_instruction = line1;
+                      $scope.$apply();
+                    });
+                    if (ionic.Platform.isAndroid() || ionic.Platform.isIOS() || ionic.Platform.isWindowsPhone()) {
+
+                    }
+                    else {
+                      // for non-mobile devices, we'll also show a popup infobox
+                      pushpinClick = Microsoft.Maps.Events.addHandler(pushpinTeam, 'click', displayEventInfo);
+                    }
 
                     // bing maps v7 and v8 work differently, handle either just in case
-                    if(infobox.setMap)
+                    if (infobox.setMap)
                       infobox.setMap($scope.map);
                     else
                       infobox.map = ($scope.map);
-                    
+
                     pushpinTeam.infobox = infobox; //So we can get it from $scope
 
-                    function displayEventInfo () {
+                    function displayEventInfo() {
                       infobox.setOptions({ visible: true, });
                     }
-
 
 
                     /*var infobox = new Microsoft.Maps.Infobox(locationTeam, { description: 'description', showCloseButton: false, showPointer: false });
@@ -335,14 +346,14 @@ website
         // reset the map to original event pins
         if (e.targetType == "map") {
           $scope.current_instruction = $scope.instructions.def;
-          $scope.teamPins.map(function (teamPin) { 
+          $scope.teamPins.map(function (teamPin) {
             teamPin.setOptions({ visible: false });
             teamPin.infobox.setOptions({ visible: false });
-         });
+          });
           $scope.eventPins.map(function (eventPin) { eventPin.setOptions({ visible: true }) });
           $scope.$apply();
-        } 
-        
+        }
+
       });
 
 
@@ -354,4 +365,4 @@ website
     //   $interval(initialize, 2000);
 
   })
-;
+  ;
