@@ -2,6 +2,10 @@ angular.module('starter.controllers', [])
 
   .controller('DashCtrl', function ($scope, $window, $interval, frcapiService) {
     var search;
+    $scope.yearRange = [];
+    for(var yr=new Date().getFullYear(); yr> 1991; yr--){
+      $scope.yearRange.push(yr);
+    }
 
     $scope.eventPins = [];
     $scope.teamPins = [];
@@ -33,6 +37,16 @@ angular.module('starter.controllers', [])
 
       frcapiService.getEvents($scope.year).then(eventDataLoaded);
     }
+    $scope.refreshYear = function () {
+      
+      $scope.map.entities.clear();
+      $scope.eventPins = [];
+      $scope.teamPins = [];
+
+      $scope.events = [];
+      $scope.loadCompleted = false;
+      frcapiService.getEvents($scope.year).then(eventDataLoaded);
+    }
 
     function getColor(rookie_year) {
       /*
@@ -60,16 +74,16 @@ angular.module('starter.controllers', [])
           var location = geocodeResult.results[0].location;
           //var location = new Location(event.venue_address);
           //console.log("FRC event " + event.key + ", " + event.locationString);
-          
+
           for (var i = 0; i < $scope.events.length; ++i) {
             var evt = $scope.events[i];
             if (evt.eventLocation) {
               if ((evt.eventLocation.latitude == location.latitude && evt.eventLocation.longitude == location.longitude)) {
-                  location.latitude += .02;
+                location.latitude += .02;
               }
             }
           }
-          
+
           var pushpin = new Microsoft.Maps.Pushpin(location,
             {
               // text: event.key,
@@ -103,7 +117,8 @@ angular.module('starter.controllers', [])
           $scope.eventPins.push(pushpin);
           $scope.map.entities.push(pushpin);
 
-          debouncedFitMapToEvents();
+          // this doesn't really work that well. just leave it alone for now
+          //debouncedFitMapToEvents();
         }
       }
 
@@ -114,7 +129,8 @@ angular.module('starter.controllers', [])
         var locationString = event.location;
         event.locationString = locationString; // hang on to this for later
         event.teamPins = []; // we'll store each event's team pins for convenience
-        if (locationString != null && event.alliances && event.alliances.length) {
+        //if (locationString != null && event.alliances && event.alliances.length) {
+        if (locationString != null) {
 
           search.geocode({
             where: locationString, count: 1,
@@ -154,7 +170,7 @@ angular.module('starter.controllers', [])
                     var locationTeam = geocodeResultTeam.results[0].location;
                     for (var i = 0; i < event.teams.length; ++i) {
                       if (event.teams[i].teamLocation && (event.teams[i].teamLocation.latitude == locationTeam.latitude && event.teams[i].teamLocation.longitude == locationTeam.longitude)) {
-                          locationTeam.latitude += .02;
+                        locationTeam.latitude += .02;
                       }
                     }
                     var pushpinTeam = new Microsoft.Maps.Pushpin(locationTeam,
@@ -328,7 +344,7 @@ website
       // var options = $scope.map.getOptions();
       var options = {};
       options.bounds = bestFitEvents;
-      //$scope.map.setView(options);
+      $scope.map.setView(options);
     }
 
     function bestFitMapToTeams(event) {

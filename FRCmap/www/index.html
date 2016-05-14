@@ -1,58 +1,68 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <title></title>
 
-    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+  <title></title>
 
-    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+  <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+
+  <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
 
-    <!-- ionic/angularjs js -->
-    <script src="lib/ionic/js/ionic.bundle.js"></script>
-    
-        <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-        
-        
-        <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?branch=experimental'></script>
-      
+  <!-- ionic/angularjs js -->
+  <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+  <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+
+
+  <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?branch=experimental'></script>
 
 
 
-<!--<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0&mkt=en-us"></script>-->
-    
-       
-        
-        <!--
+
+  <!--<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0&mkt=en-us"></script>-->
+
+
+
+  <!--
         <script charset="UTF-8" type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0">
          -->
-</script>
-        
-    <!-- cordova script (this will be a 404 during development) -->
-    <!--<script src="cordova.js"></script>-->
+  </script>
 
-    <!-- your app's js -->
-    <script src="js/app.js"></script>
-    <script src="js/controllers.js"></script>
-    <script src="js/services.js"></script>
-  </head>
-  <body ng-app="starter" ng-controller="DashCtrl">
+  <!-- cordova script (this will be a 404 during development) -->
+  <!--<script src="cordova.js"></script>-->
 
-    <ion-header-bar class="bar-dark">
-      <h1 class="title">FIRST Robotics Event Map</h1>
-    </ion-header-bar>
-    <ion-content scroll="false">
-      <div id="myMap" data-tap-disabled="true"></div>
-    </ion-content>
-    <ion-footer-bar class="bar-dark footer-tall ">
-      <div class="instructions">
-        <p ng-bind-html="current_instruction"></p>
-      </div>
-    </ion-footer-bar>
-    
-  </body>
+  <!-- your app's js -->
+  <script src="js/app.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/services.js"></script>
+</head>
+
+<body ng-app="starter" ng-controller="DashCtrl">
+
+  <ion-header-bar class="bar-dark">
+    <div class="title h1">FIRST Robotics Event Map</div>
+    <div class="" style="    position: absolute;
+    top: 5px;
+    right: 5px;
+    bottom: 5px;" >
+      <select class="" ng-model="year" ng-change="refreshYear()" ng-options="o as o for o in yearRange "> 
+    </select>
+    </div>
+  </ion-header-bar>
+  <ion-content scroll="false">
+    <div id="myMap" data-tap-disabled="true"></div>
+  </ion-content>
+  <ion-footer-bar class="bar-dark footer-tall ">
+    <div class="instructions">
+      <p ng-bind-html="current_instruction"></p>
+    </div>
+  </ion-footer-bar>
+
+</body>
+
 </html>
