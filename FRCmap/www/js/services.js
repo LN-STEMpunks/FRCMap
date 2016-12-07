@@ -2,7 +2,7 @@ angular.module('starter.services', [])
 .factory('frcapiService', function ($http) {
 
     //var apiBaseUrl = 'https://frc-staging-api.firstinspires.org/api/v2.0';
-    var apiBaseUrl = 'http://www.thebluealliance.com/api/v2';
+    var apiBaseUrl = 'https://www.thebluealliance.com/api/v2';
 
 
     //        var authTokenHeaderValue = 'Basic cmFuZGJyb3duOjYwRUQ5NkE4LUI0OEEtNEEzNy1BMENCLThGQTk0MDE2M0JGNQ==';
