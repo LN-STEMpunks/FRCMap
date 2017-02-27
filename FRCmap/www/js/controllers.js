@@ -10,7 +10,7 @@ angular.module('starter.controllers', [])
     $scope.eventPins = [];
     $scope.teamPins = [];
 
-    $scope.year = 2016;
+    $scope.year = 2017;
     $scope.events = [];
     $scope.loadCompleted = false;
 
@@ -187,7 +187,7 @@ angular.module('starter.controllers', [])
                     team.teamLocation = locationTeam;
 
                     /*
-                    
+
                     country_name
 :
 "USA"
@@ -227,8 +227,8 @@ team_number
 website
 :
 "http://www.firstinspires.org/"
-                    
-                    
+
+
                     */
 
                     var line1 = "<div>";
@@ -265,10 +265,10 @@ website
                     };
                     var infobox = new Microsoft.Maps.Infobox(locationTeam, infoboxOptions);
                     $scope.map.entities.push(infobox);
-                    //infobox.setHtmlContent('<div id="infoboxText" style="background-color:White; border-style:solid;border-width:medium; border-color:DarkOrange; min-height:100px;width:240px;"><b id="infoboxTitle" style="position:absolute; top:10px; left:10px; width:220px;">myTitle</b><a id="infoboxDescription" style="position:absolute; top:30px; left:10px; width:220px;">Description</a></div>'); 
+                    //infobox.setHtmlContent('<div id="infoboxText" style="background-color:White; border-style:solid;border-width:medium; border-color:DarkOrange; min-height:100px;width:240px;"><b id="infoboxTitle" style="position:absolute; top:10px; left:10px; width:220px;">myTitle</b><a id="infoboxDescription" style="position:absolute; top:30px; left:10px; width:220px;">Description</a></div>');
 
                     // HACKISH: bing maps v8 seems to not respond to touch events on android chrome
-                    // Also popups on mobile are kinda annoying. So for mobile devices, let's just show the team info in the footer div instead of infobox 
+                    // Also popups on mobile are kinda annoying. So for mobile devices, let's just show the team info in the footer div instead of infobox
                     Microsoft.Maps.Events.addHandler(pushpinTeam, 'click', function showToolTip(e) {
                       $scope.current_instruction = line1;
                       $scope.$apply();
