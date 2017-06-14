@@ -2,6 +2,11 @@
 A map of FRC events and teams
 
 This project in action:
+
+GitHub Pages link:
+http://programming.lnstempunks.org/frcmap/FRCmap/www/index.html
+
+Azure hosted link:
 http://lnstempunks.azurewebsites.net/FRCmap
 
 
